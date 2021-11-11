@@ -6,18 +6,32 @@ var timerEl = $(".timer-count");
 //var timerElement
 var startButton = $("#start-button");
 var nextButton = $(".btn-next");
+var incorrectAns = $(".false");
+var correctAns = $(".true");
 
 $(".questions").hide();
 
 //Selects questions to be rendered to the screen from the array
 function renderQuestion() {
-  // quizEl = [];
-  // // Uses loop to push questions to quiz array
-  // for (var i = 0; i < questions.length; i++) {
-  //   quizEl.push(questions);
-  //   cardEl.append(quizEl);
-  // }
   $("#q1").show();
+  //   function nextQuestion () {
+  //     If $(".correct")
+  //   }
+}
+
+//The nextQuestion function is called when the user selects an answer
+function incorrectAnswer() {
+  //   timerCount -= 3;}
+  // $("#q1").hide();
+  // $("#q2").show();
+  console.log("wrong");
+}
+
+function correctAnswer() {
+  // d
+  // $("#q1").hide();
+  // $("#q2").show();
+  console.log("right");
 }
 
 // The startQuiz function is called when the start button is clicked
@@ -43,13 +57,6 @@ function startTimer() {
   }, 1000);
 }
 
-//The nextQuestion function is called when the user selects an answer
-function nextQuestion() {
-  //If $("true") {
-  //   timerCount -= 3;
-  //   }
-}
-
 // The gameOver function is called when timer reaches 0
 function gameOver() {
   //wordBlank.textContent = "GAME OVER";
@@ -63,29 +70,5 @@ function gameOver() {
 
 // Attach event listener to start button to call startQuiz function on click
 startButton.on("click", startQuiz);
-nextButton.on("click", nextQuestion);
-
-/*
-foo.on("click", func()) {
-  //click also starts timer -- separate function
-  questions1="show"
-  func() {
-    if [var=answer]=true
-    //give user a point
-  } else {
-    if [var=answer]=false
-    //subtract time
-  }
-  console.log("answer")
-  questions1="hide"
-  questions2="show"
-};
-*/
-
-/*
-for question in questions:
-  - write question to html
-  - wait for user input
-  - decide whether user input is good
-  - update score
-*/
+incorrectAns.on("click", incorrectAnswer);
+correctAns.on("click", correctAnswer);
