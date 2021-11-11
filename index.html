@@ -4,28 +4,60 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Password Generator</title>
+    <title>The Great Kiwi Quiz</title>
     <link rel="stylesheet" href="./assets/css/style.css" />
   </head>
   <body>
     <div class="wrapper">
       <header>
-        <h1>Password Generator</h1>
+        <h1>Quiz</h1>
       </header>
       <div class="card">
         <div class="card-header">
-          <h2>Generate a Password</h2>
+          <div class="card timer">
+            <div class="timer-text">
+              <div class="large-font timer-count">30</div>
+              <h3>seconds remaining</h3>
+            </div>
+          </div>
         </div>
         <div class="card-body">
-          <textarea
-            readonly
-            id="password"
-            placeholder="Your Secure Password"
-            aria-label="Generated Password"
-          ></textarea>
+          <ul class="questions" id="q1">
+            <h2>Question 1</h2>
+            <li id="q1-a"></li>
+            <button class="correct">Click</button>
+            <li id="q1-b"></li>
+            <button>Click</button>
+            <li id="q1-c"></li>
+            <button>Click</button>
+          </ul>
+          <ul class="questions" id="q2">
+            <h2>Question 2</h2>
+            <li id="q2-a"></li>
+            <li id="q2-b"></li>
+            <li id="q2-c"></li>
+          </ul>
+          <ul class="questions" id="q3">
+            <h2>Question 3</h2>
+            <li id="q3-a"></li>
+            <li id="q3-b"></li>
+            <li id="q3-c"></li>
+          </ul>
+          <ul class="questions" id="q4">
+            <h2>Question 4</h2>
+            <li id="q4-a"></li>
+            <li id="q4-b"></li>
+            <li id="q4-c"></li>
+          </ul>
+          <ul class="questions" id="q5">
+            <h2>Question 5</h2>
+            <li id="q5-a"></li>
+            <li id="q5-b"></li>
+            <li id="q5-c"></li>
+          </ul>
         </div>
         <div class="card-footer">
-          <button id="generate" class="btn">Generate Password</button>
+          <button class="btn" id="start-button">Click here to start</button>
         </div>
       </div>
     </div>
