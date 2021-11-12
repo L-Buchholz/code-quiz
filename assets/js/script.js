@@ -23,7 +23,10 @@ $(scoreList).hide();
 
 // The startQuiz function is called when the start button is clicked
 function startQuiz() {
+  $(".game-over").hide();
+  $(scoreList).hide();
   timerCount = 15;
+  currentQuestion = 0;
   // Prevents start button from being clicked during quiz (thereby resetting time)
   startButton.attr("disabled", true).hide();
   //Starts the timer for the quiz
@@ -112,7 +115,7 @@ function enterScore() {
   var initButton = $("<button>").append("Save my score");
   initButton.on("click", saveScore);
   //The score for the current game is logged (locally), and the player is given the option of saving it
-  cardEl.append(
+  $(".game-over").append(
     "Your score was: ",
     timerCount,
     $("<br>"),
@@ -131,6 +134,7 @@ function enterScore() {
     renderScores();
     $(initButton).hide();
     // Enables start button again
+    startButton.attr("disabled", false).show();
   }
 }
 
