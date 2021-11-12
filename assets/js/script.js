@@ -11,7 +11,6 @@ var scoreList = $("#high-scores");
 
 //Establishes a base index for the score and the question number (so a loop can be run)
 
-var scoreCounter = 0;
 var currentQuestion = 0;
 
 //This stores the scores to localStorage for comparison purposes
@@ -24,30 +23,9 @@ $(scoreList).hide();
 
 //*Functions: These execute the quiz using the above variables; they're called by event listeners (below)
 
-/*Selects questions to be rendered to the screen from the array. This function is 
-called when the user selects ANY answer*/
-function nextQuestion() {
-  $("#q" + currentQuestion).hide();
-  $("#q" + (currentQuestion + 1)).show();
-  currentQuestion += 1;
-}
-
-//This function removes time from the clock if the users selects an incorrect answer
-function incorrectAnswer() {
-  timerCount -= 3;
-  console.log("wrong");
-  nextQuestion();
-}
-
-//This function advances the question without a time penalty if the user selects the correct answer
-function correctAnswer() {
-  console.log("right");
-  nextQuestion();
-}
-
-// The startQuiz function is called when the start button is clicked (total time: 30 secs)
+// The startQuiz function is called when the start button is clicked
 function startQuiz() {
-  timerCount = 30;
+  timerCount = 15;
   // Prevents start button from being clicked during quiz (thereby resetting time)
   startButton.attr("disabled", true).hide();
   //Starts the timer for the quiz
@@ -65,11 +43,38 @@ function startTimer() {
     if (timerCount === 0) {
       // This clears the timer interval when it reaches "0"
       clearInterval(timer);
-      //Function calling for the end of the game
       gameOver();
     }
     //Time, in milliseconds, between countdown (1-sec intervals)
   }, 1000);
+}
+
+/*Selects questions to be rendered to the screen from the array. This function is 
+called when the user selects ANY answer*/
+function nextQuestion() {
+  //Updates rendered time after question buttons are clicked, including any penalties
+  timerEl.text(timerCount);
+  $("#q" + currentQuestion).hide();
+  $("#q" + (currentQuestion + 1)).show();
+  currentQuestion += 1;
+  if (currentQuestion > 4) {
+    // This clears the timer interval when the user completes all of the questions
+    clearInterval(timer);
+    gameOver();
+  }
+}
+
+//This function removes time from the clock if the users selects an incorrect answer
+function incorrectAnswer() {
+  timerCount -= 3;
+  console.log("wrong");
+  nextQuestion();
+}
+
+//This function advances the question without a time penalty if the user selects the correct answer
+function correctAnswer() {
+  console.log("right");
+  nextQuestion();
 }
 
 // The gameOver function is called when the timer reaches "0"
@@ -113,7 +118,7 @@ function enterScore() {
   //The score for the current game is logged (locally), and the player is given the option of saving it
   cardEl.append(
     "Your score was: ",
-    scoreCounter,
+    timerCount,
     $("<br>"),
     "Click to enter score: ",
     initButton
@@ -122,12 +127,13 @@ function enterScore() {
   function saveScore() {
     var scoreObject = {
       initials: prompt("Enter your initials:"),
-      score: scoreCounter,
+      score: timerCount,
     };
     //The score and initials are then pushed back out via renderScore (above)
     storedScore.push(scoreObject);
     localStorage.setItem("scores", JSON.stringify(storedScore));
     renderScores();
+    // Enables start button again
   }
 }
 
