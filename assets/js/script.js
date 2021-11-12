@@ -1,9 +1,7 @@
-//one question, stop clock if answer is incorrect
-//localStorage log answer
+//*Variables: These are defined further in the code and connect it with the HTML
 
 var cardEl = $(".card-body");
 var timerEl = $(".timer-count");
-//var timerElement
 var startButton = $("#start-button");
 var scoreButton = $("#score-button").css("background-color", "blue");
 var nextButton = $(".btn-next");
@@ -11,8 +9,10 @@ var incorrectAns = $(".false");
 var correctAns = $(".true");
 var scoreList = $("#high-scores");
 
+//Establishes a base index for the score and the question number (so a loop can be run)
+
 var scoreCounter = 0;
-var currentIndex = 0;
+var currentQuestion = 0;
 
 //This stores the scores to localStorage for comparison purposes
 var storedScore = JSON.parse(localStorage.getItem("scores")) || [];
@@ -22,102 +22,116 @@ $(".game-over").hide();
 $(scoreButton).hide();
 $(scoreList).hide();
 
-//Selects questions to be rendered to the screen from the array
-function renderQuestion() {
-  $("#q1").show();
-  //   function nextQuestion () {
-  //     If $(".correct")
-  //   }
+//*Functions: These execute the quiz using the above variables; they're called by event listeners (below)
+
+/*Selects questions to be rendered to the screen from the array. This function is 
+called when the user selects ANY answer*/
+function nextQuestion() {
+  $("#q" + currentQuestion).hide();
+  $("#q" + (currentQuestion + 1)).show();
+  currentQuestion += 1;
 }
 
-//The nextQuestion function is called when the user selects an answer
+//This function removes time from the clock if the users selects an incorrect answer
 function incorrectAnswer() {
-  //   timerCount -= 3;}
-  // $("#q1").hide();
-  // $("#q2").show();
+  timerCount -= 3;
   console.log("wrong");
+  nextQuestion();
 }
 
+//This function advances the question without a time penalty if the user selects the correct answer
 function correctAnswer() {
-  // d
-  // $("#q1").hide();
-  // $("#q2").show();
   console.log("right");
+  nextQuestion();
 }
 
-// The startQuiz function is called when the start button is clicked
+// The startQuiz function is called when the start button is clicked (total time: 30 secs)
 function startQuiz() {
-  //do I need to establish something that shows the game isn't already over here?
-  //RESET TIMER TO 30
-  timerCount = 5;
-  // Prevents start button from being clicked during quiz (re-setting time)
+  timerCount = 30;
+  // Prevents start button from being clicked during quiz (thereby resetting time)
   startButton.attr("disabled", true).hide();
+  //Starts the timer for the quiz
   startTimer();
-  renderQuestion();
+  //Takes the player to the first question
+  nextQuestion();
 }
 
 // The startTimer function starts and stops the timer
 function startTimer() {
-  // Sets timer
+  // This sets the timer
   timer = setInterval(function () {
     timerCount--;
     timerEl.text(timerCount);
     if (timerCount === 0) {
-      // Clears interval
+      // This clears the timer interval when it reaches "0"
       clearInterval(timer);
+      //Function calling for the end of the game
       gameOver();
     }
+    //Time, in milliseconds, between countdown (1-sec intervals)
   }, 1000);
 }
 
-// The gameOver function is called when timer reaches 0
+// The gameOver function is called when the timer reaches "0"
 function gameOver() {
+  //Various questions and buttons are hidden and then revealed at this point
   $(".questions").hide();
   $(".game-over").show();
   $(startButton).hide();
   $(scoreButton).show();
+  //The opportunity for the player to enter their score is called here
   enterScore();
 }
 
+//This function ties in with enterScore (below)
 function renderScores() {
+  //A list of scores is added to the main content area of the page
+  $(cardEl).append(scoreList);
+  //The score list starts empty by default
   $(scoreList).show().empty();
-  if (storedScore.length === 0) {
-    scoreList.append("Please play the quiz first!");
-  } else {
-    for (var i = 0; i < storedScore.length; i++) {
-      var newLi = $("<li>");
-      newLi.text(storedScore[i].initials + " ----- " + storedScore[i].score);
-      scoreList.append(newLi);
-    }
+  //New scores are appended as list items (not defined in the HTML)
+  for (var i = 0; i < storedScore.length; i++) {
+    var newLi = $("<li>");
+    newLi.text(
+      "Name: " +
+        storedScore[i].initials +
+        "  *  " +
+        "Score: " +
+        storedScore[i].score
+    );
+    //The list is added to the webpage
+    scoreList.append(newLi);
   }
 }
 
 function enterScore() {
   $(scoreButton).hide();
   $(startButton).show();
-  $(".game-over").hide();
-  var initButton = scoreList.append("button", "Save my score");
+  //A button appears giving the player the opportunity to save their score
+  var initButton = $("<button>").append("Save my score");
   initButton.on("click", saveScore);
-  cardEl.text(
-    "Your score was: " +
-      scoreCounter +
-      "\n\n Click to enter score: " +
-      initButton
+  //The score for the current game is logged (locally), and the player is given the option of saving it
+  cardEl.append(
+    "Your score was: ",
+    scoreCounter,
+    $("<br>"),
+    "Click to enter score: ",
+    initButton
   );
+  //Function within a function: This saves the player's score and their initials (user-entered)
   function saveScore() {
     var scoreObject = {
-      initials: userInitials,
+      initials: prompt("Enter your initials:"),
       score: scoreCounter,
     };
-    storedScore.push(scoreObj);
+    //The score and initials are then pushed back out via renderScore (above)
+    storedScore.push(scoreObject);
     localStorage.setItem("scores", JSON.stringify(storedScore));
+    renderScores();
   }
-  renderScores();
 }
-// **TO DO: SHOW START BUTTON AGAIN AT END OF GAME**
-//startButton.style.display = "hide";
 
-// Attach event listener to start button to call startQuiz function on click
+//*Event listeners: These attach to the buttons and execute the above functions when clicked
 startButton.on("click", startQuiz);
 incorrectAns.on("click", incorrectAnswer);
 correctAns.on("click", correctAnswer);
