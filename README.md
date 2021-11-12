@@ -21,4 +21,4 @@ The following is a screenshot of the webpage, highlighting its appearance and fu
 
 ## Link to deployed application
 
-The password generator webpage can be found here: https://github.com/L-Buchholz/code-quiz
+The password generator webpage can be found here: https://l-buchholz.github.io/code-quiz/
