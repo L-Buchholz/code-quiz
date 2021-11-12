@@ -3,7 +3,6 @@
 var cardEl = $(".card-body");
 var timerEl = $(".timer-count");
 var startButton = $("#start-button");
-var scoreButton = $("#score-button").css("background-color", "blue");
 var nextButton = $(".btn-next");
 var incorrectAns = $(".false");
 var correctAns = $(".true");
@@ -18,7 +17,6 @@ var storedScore = JSON.parse(localStorage.getItem("scores")) || [];
 
 $(".questions").hide();
 $(".game-over").hide();
-$(scoreButton).hide();
 $(scoreList).hide();
 
 //*Functions: These execute the quiz using the above variables; they're called by event listeners (below)
@@ -83,7 +81,6 @@ function gameOver() {
   $(".questions").hide();
   $(".game-over").show();
   $(startButton).hide();
-  $(scoreButton).show();
   //The opportunity for the player to enter their score is called here
   enterScore();
 }
@@ -110,7 +107,6 @@ function renderScores() {
 }
 
 function enterScore() {
-  $(scoreButton).hide();
   $(startButton).show();
   //A button appears giving the player the opportunity to save their score
   var initButton = $("<button>").append("Save my score");
@@ -133,6 +129,7 @@ function enterScore() {
     storedScore.push(scoreObject);
     localStorage.setItem("scores", JSON.stringify(storedScore));
     renderScores();
+    $(initButton).hide();
     // Enables start button again
   }
 }
@@ -141,4 +138,3 @@ function enterScore() {
 startButton.on("click", startQuiz);
 incorrectAns.on("click", incorrectAnswer);
 correctAns.on("click", correctAnswer);
-scoreButton.on("click", renderScores);
